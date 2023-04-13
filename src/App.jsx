@@ -1,47 +1,67 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import Spinner from './components/Spinner';
 
 function App() {
 
   const [pokemones, setPokemones] = useState([]);
+  const [searchPoke, setSearchPoke] = useState([]);
+  const [filter, setFilter] = useState();
   const [loading, setLoading] = useState(false);
+  const [limit, setLimit] = useState(12);
 
-  const getPoke = async () => {
+  const result = filter ? searchPoke.filter(e => e.name.toLowerCase().includes(filter.toLowerCase())) : pokemones
+
+  const getPoke = async (limit) => {
     setLoading(true);
 
-    const req = await fetch('https://pokeapi.co/api/v2/pokemon/');
+    const req = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${limit}`);
 
     const res = await req.json();
 
-    setPokemones(res.results);
+    if (req.ok) {
+      setLoading(false);
+      setPokemones(res.results);
+    }
+  }
+
+  const getSearchPoke = async () => {
+    const req = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=1000`);
+    const res = await req.json();
+    setSearchPoke(res.results);
   }
 
 
   useEffect(() => {
-    getPoke();
-  }, [])
+    getPoke(limit);
+    getSearchPoke();
+  }, [limit])
 
   return (
     <main className='container'>
       <header>
-        <h1>Poke Api</h1>
-        <input type="text" placeholder='Ingrese un nombre'/>
+        <h1>Pokedex</h1>
+        <input type="text" placeholder='Ingrese un nombre' onChange={({ target }) => setFilter(target.value)} />
       </header>
-      <div className="row row-cols-1 row-cols-md-4 g-5">
-        {pokemones.map(e => (
+      <div className="row row-cols-1 row-cols-md-4 g-4">
+        {result.map(e => (
           <div className="col">
-            <div class="card" style={{width: '18rem'}}>
-              <img src={`https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/${e.name}.png`} class="card-img-top"/>
-                <div class="card-body">
-                  <h5 class="card-title">{e.name}</h5>
-                  <button href="#" class="btn btn-primary">Ver más</button>
-                </div>
+            <div className="card" style={{ width: '16rem' }}>
+              <img src={`https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/${e.name}.png`} className="card-img-top" />
+              <div className="card-body">
+                <h5 className="card-title">{e.name}</h5>
+                <button href="#" className="btn btn-primary">Ver más</button>
+              </div>
             </div>
           </div>
         ))}
-
+      </div>
+      <div className='button-group'>
+        <button className='btn btn-primary' disabled={limit === 12 ? true : false} type='button' onClick={() => setLimit(limit - 12)}>Cargar menos</button>
+        <button type='button' className='btn btn-primary' onClick={() => setLimit(limit + 12)}>{loading ? <Spinner /> : 'Cargar más'}</button>
       </div>
     </main>
+
   )
 }
 

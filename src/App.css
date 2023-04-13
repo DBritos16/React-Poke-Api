@@ -1,3 +1,7 @@
+body {
+    background-color: #d30a40;
+}
+
 header {
     display: flex;
     flex-direction: column;
@@ -8,23 +12,41 @@ header {
 }
 
 h1 {
+    color: white;
     margin-bottom: 20px;
 }
 
 input {
-    border-radius: 0;
+    border-radius: 20px;
+    border: 0px;
     width: 40%;
     height: 50px;
-    text-align: center;
     font-size: 1.5em;
+    outline: none;
+    padding-left: 20px;
 }
 
 .card {
-    border-radius: 0;
+    border: solid white 2px;
+    border-radius: 30px;
     text-align: center;
-    margin: 20px;
 }
 
-button {
-    background-color: red;
+.card .btn {
+    border-radius: 20px;
+    width: 90%;
 }
+
+.button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 30px
+}
+
+.button-group button {
+    margin: 8px;
+    border-radius: 20px;
+    font-size: 17px;
+}
+
