@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Spinner from './components/Spinner';
+import 'aos/dist/aos.css';
+import Aos from 'aos';
 
 function App() {
 
@@ -34,8 +36,12 @@ function App() {
 
   useEffect(() => {
     getPoke(limit);
-    getSearchPoke();
   }, [limit])
+
+  useEffect(()=>{
+    getSearchPoke();
+    Aos.init()
+  },[])
 
   return (
     <main className='container'>
@@ -44,12 +50,12 @@ function App() {
         <input type="text" placeholder='Ingrese un nombre' onChange={({ target }) => setFilter(target.value)} />
       </header>
       <div className="row row-cols-1 row-cols-md-4 g-4">
-        {result.map(e => (
-          <div className="col">
+        {result.map(poke => (
+          <div className="col" data-aos="flip-up" key={poke.name}>
             <div className="card" style={{ width: '16rem' }}>
-              <img src={`https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/${e.name}.png`} className="card-img-top" />
+              <img src={`https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/${poke.name}.png`} className="card-img-top" />
               <div className="card-body">
-                <h5 className="card-title">{e.name}</h5>
+                <h5 className="card-title">{poke.name}</h5>
                 <button href="#" className="btn btn-primary">Ver más</button>
               </div>
             </div>

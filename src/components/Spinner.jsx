@@ -2,8 +2,8 @@ import React from 'react'
 
 const Spinner = ({color}) => {
     return (
-        <div id='spinner' class={`spinner-border text-${color}`} role="status">
-            <span class="visually-hidden">Loading...</span>
+        <div id='spinner' className={`spinner-border text-${color}`} role="status">
+            <span className="visually-hidden">Loading...</span>
         </div>
     )
 }
